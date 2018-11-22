@@ -6,7 +6,7 @@ namespace ServicesCheckerLib.Interfaces
 {
     internal interface ITimeMaster
     {
-        DateTime GetCurrentTime();
+        DateTime CurrentTime { get; } 
         event Action<DateTime> NextTimeEvent;
     }
 }
