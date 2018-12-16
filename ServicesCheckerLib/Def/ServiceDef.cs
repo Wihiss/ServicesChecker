@@ -33,5 +33,7 @@ namespace ServicesCheckerLib.Def
         /// Disabled flag
         /// </summary>
         public bool Disabled { get; set; }
+
+        public string GetFullName() => $"{Name} ({ID})";
     }
 }

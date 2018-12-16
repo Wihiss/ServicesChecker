@@ -12,9 +12,12 @@ namespace ServicesCheckerLib
 {
     internal class SCRunnerImpl : ISCRunner
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private readonly ITimeMaster _timeMaster;
         private bool _started = false;
         private readonly object _startStopLock;
+        private volatile bool _checkInProgress = false;
 
         private class ServiceCheckerContainer
         {
@@ -42,7 +45,7 @@ namespace ServicesCheckerLib
 
         private void InitServiceCheckers(SCConfig config)
         {
-            DateTime now = DateTime.UtcNow;
+            DateTime now = DateTime.Now;
 
             Array.ForEach(config.Services, x =>
             {
@@ -57,22 +60,57 @@ namespace ServicesCheckerLib
 
         private void TimeMaster_OnNextTimeEvent(DateTime currentTime)
         {
-            List<ServiceCheckerContainer> targetContainers = _serviceCheckers.
-                Where(x => currentTime >= x.NextCheckTime && !x.Checker.IsCheckInProgress).ToList();
+            CheckServices(currentTime);
+        }
 
-            if (targetContainers.Count > 0)
+        private void CheckServices(DateTime currentTime)
+        {
+            if (_checkInProgress)
+                return;
+
+            _checkInProgress = true;
+
+            try
             {
-                Task.Factory.StartNew(() =>
+                List<ServiceCheckerContainer> targetContainers = _serviceCheckers.
+                    Where(x => currentTime >= x.NextCheckTime).ToList();
 
-                    Parallel.ForEach(targetContainers, x =>
-                    {
-                        CheckResult r = x.Checker.Check();
+                if (targetContainers.Count > 0)
+                {
+                    Task.Factory.StartNew(() => {
 
-                        // TODO: Handle check result
+                        try
+                        {
+                            Parallel.ForEach(targetContainers, x =>
+                            {
+                                CheckResult r = x.Checker.Check();
 
-                        x.NextCheckTime = DateTime.UtcNow.AddSeconds(x.ServiceDef.PollPeriod);
-                    })
-                );
+                                DateTime nextCheckTime =  DateTime.Now.AddSeconds(x.ServiceDef.PollPeriod);
+
+                                logger.Info("Service " + x.ServiceDef.GetFullName() + ": " + r.GetText() + System.Environment.NewLine + "Next check time: " + nextCheckTime);
+
+                                x.NextCheckTime = nextCheckTime;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex, "Parallel.ForEach exception: " + ex.Message);
+                        }
+                        finally
+                        {
+                            _checkInProgress = false;
+                        }
+                    });
+                }
+                else
+                {
+                    _checkInProgress = false;
+                }
+            }
+            catch (Exception)
+            {
+                _checkInProgress = false;
+                throw;
             }
         }
 
@@ -82,6 +120,8 @@ namespace ServicesCheckerLib
             {
                 if (_started)
                     throw new InvalidOperationException("Already started");
+
+                CheckServices(DateTime.Now);
 
                 _timeMaster.NextTimeEvent += TimeMaster_OnNextTimeEvent;
 

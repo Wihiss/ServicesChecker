@@ -11,7 +11,6 @@ namespace ServicesCheckerLib.Impl
     {
         private readonly string _host;
         private readonly int _port;
-        private volatile bool _checkInProgress = false;
 
         internal ServiceChecker(string host, int port)
         {
@@ -26,45 +25,42 @@ namespace ServicesCheckerLib.Impl
 
         internal CheckResult Check()
         {
+            CheckResult r = new CheckResult()
+            {
+                Status = ServiceStatus.Unknown
+            };
+
             try
             {
-                _checkInProgress = true;
-
-                CheckResult r = new CheckResult()
-                {
-                    Status = ServiceStatus.Unknown
-                };
-
-                try
-                {
-                    using (TcpClient c = new TcpClient(_host, _port))
-                        r.Status = ServiceStatus.Available;
-                }
-                catch (SocketException ex)
-                {
-                    r.Status = ServiceStatus.Unavailable;
-                    r.LastError = ex;
-                }
-                catch (Exception ex)
-                {
-                    r.LastError = ex;
-                }
-
-                return r;
+                using (TcpClient c = new TcpClient(_host, _port))
+                    r.Status = ServiceStatus.Available;
             }
-            finally
+            catch (SocketException ex)
             {
-                _checkInProgress = false;
+                r.Status = ServiceStatus.Unavailable;
+                r.LastError = ex;
             }
-        }
+            catch (Exception ex)
+            {
+                r.LastError = ex;
+            }
 
-        internal bool IsCheckInProgress => _checkInProgress;
+            return r;
+        }
     }
 
     internal class CheckResult
     {
         internal ServiceStatus Status;
         internal Exception LastError;
+
+        internal string GetText()
+        {
+            if (LastError == null)
+                return $"Status: {Status}";
+
+            return $"Status: {Status}; Error: " + LastError.ToString();
+        }
     }
 
     internal enum ServiceStatus
