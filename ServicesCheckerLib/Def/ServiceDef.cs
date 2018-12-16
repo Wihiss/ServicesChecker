@@ -24,7 +24,7 @@ namespace ServicesCheckerLib.Def
         /// <summary>
         /// Service port
         /// </summary>
-        public int? Port { get; set; }
+        public int Port { get; set; }
         /// <summary>
         /// Service poll period (in seconds)
         /// </summary>

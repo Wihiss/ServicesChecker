@@ -7,7 +7,7 @@ namespace ServicesCheckerLib.Interfaces.Pub
 {
     public interface ISCRunner
     {
-        void Start(SCConfig config);
+        void Start();
         void Stop();
     }
 }

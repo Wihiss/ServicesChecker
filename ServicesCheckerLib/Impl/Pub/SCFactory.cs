@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Impl.Config;
 using ServicesCheckerLib.Interfaces.Pub;
 
@@ -8,15 +9,16 @@ namespace ServicesCheckerLib.Impl.Pub
 {
     public static class SCFactory
     {
-        static SCFactory()
-        {
-
-        }
-
         public static IConfigMaster CreateConfigMaster() => new ConfigMasterImpl();
-        public static ISCRunner CreateRunner()
+
+        public static ISCRunner CreateRunner(SCConfig config, bool autoStart)
         {
-            return new SCRunnerImpl(ComponentsFactory.CreateTimeMaster());
+            SCRunnerImpl i = new SCRunnerImpl(ComponentsFactory.CreateTimeMaster(), config);
+
+            if (autoStart)
+                i.Start();
+
+            return i;
         }
     }
 }
