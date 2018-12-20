@@ -21,7 +21,7 @@ namespace ServicesCheckerLib
 
         private class ServiceCheckerContainer
         {
-            internal ServiceChecker Checker;
+            internal IServiceChecker Checker;
             internal DateTime NextCheckTime = DateTime.MinValue;
             internal ServiceDef ServiceDef;
         }
@@ -52,7 +52,7 @@ namespace ServicesCheckerLib
                 _serviceCheckers.Add(new ServiceCheckerContainer()
                 {
                     NextCheckTime = now,
-                    Checker = new ServiceChecker(x.Host, x.Port),
+                    Checker = ComponentsFactory.CreateServiceChecker(x),
                     ServiceDef = x
                 });
             });
@@ -85,7 +85,7 @@ namespace ServicesCheckerLib
                             {
                                 CheckResult r = x.Checker.Check();
 
-                                DateTime nextCheckTime =  DateTime.Now.AddSeconds(x.ServiceDef.PollPeriod);
+                                DateTime nextCheckTime =  DateTime.Now.AddSeconds(x.ServiceDef.Period);
 
                                 logger.Info("Service " + x.ServiceDef.GetFullName() + ": " + r.GetText() + System.Environment.NewLine + "Next check time: " + nextCheckTime);
 

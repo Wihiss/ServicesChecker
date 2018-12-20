@@ -1,4 +1,5 @@
 ﻿using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -7,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ServicesCheckerLib.Impl
 {
-    internal class ServiceChecker
+    internal class TcpServiceChecker : IServiceChecker
     {
         private readonly string _host;
         private readonly int _port;
 
-        internal ServiceChecker(string host, int port)
+        internal TcpServiceChecker(string host, int port)
         {
             if (string.IsNullOrEmpty(host))
                 throw new ArgumentException(nameof(host));
@@ -23,7 +24,7 @@ namespace ServicesCheckerLib.Impl
             _port = port;
         }
 
-        internal CheckResult Check()
+        public CheckResult Check()
         {
             CheckResult r = new CheckResult()
             {
@@ -47,24 +48,5 @@ namespace ServicesCheckerLib.Impl
 
             return r;
         }
-    }
-
-    internal class CheckResult
-    {
-        internal ServiceStatus Status;
-        internal Exception LastError;
-
-        internal string GetText()
-        {
-            if (LastError == null)
-                return $"Status: {Status}";
-
-            return $"Status: {Status}; Error: " + LastError.ToString();
-        }
-    }
-
-    internal enum ServiceStatus
-    {
-        Available, Unavailable, Unknown
-    }
+    }    
 }

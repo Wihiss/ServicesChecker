@@ -1,0 +1,7 @@
+﻿services:
+ - id: 1
+   name: Test
+   host: localhost
+   port: 5000
+   period: 10
+   disabled: false

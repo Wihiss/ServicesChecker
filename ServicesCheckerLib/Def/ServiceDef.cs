@@ -12,7 +12,7 @@ namespace ServicesCheckerLib.Def
         /// <summary>
         /// Service ID
         /// </summary>
-        public int ID { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Service name
         /// </summary>
@@ -24,16 +24,16 @@ namespace ServicesCheckerLib.Def
         /// <summary>
         /// Service port
         /// </summary>
-        public int Port { get; set; }
+        public int? Port { get; set; }
         /// <summary>
         /// Service poll period (in seconds)
         /// </summary>
-        public int PollPeriod { get; set; }
+        public int Period { get; set; }
         /// <summary>
         /// Disabled flag
         /// </summary>
         public bool Disabled { get; set; }
 
-        public string GetFullName() => $"{Name} ({ID})";
+        public string GetFullName() => $"{Name} ({Id})";
     }
 }

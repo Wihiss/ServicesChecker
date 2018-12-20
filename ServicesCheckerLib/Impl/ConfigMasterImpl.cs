@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Interfaces.Pub;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace ServicesCheckerLib.Impl.Config
 {
@@ -10,7 +13,10 @@ namespace ServicesCheckerLib.Impl.Config
     {
         public SCConfig LoadFromYaml(string configFile)
         {
-            throw new NotImplementedException();
+            return new DeserializerBuilder().
+                WithNamingConvention(new CamelCaseNamingConvention()).
+                Build().
+                Deserialize<SCConfig>(File.ReadAllText(configFile));
         }
     }
 }
