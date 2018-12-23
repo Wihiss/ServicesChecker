@@ -2,6 +2,7 @@
 using ServicesCheckerLib.Impl.Pub;
 using ServicesCheckerLib.Interfaces.Pub;
 using System;
+using System.Threading;
 
 namespace ServicesChecker
 {
@@ -30,7 +31,9 @@ namespace ServicesChecker
             ISCRunner runner = SCFactory.CreateRunner(config, false);
             runner.Start();
 
-            Console.ReadKey();
+            // Console.ReadKey();
+
+            Thread.Sleep(60000);
 
             runner.Stop();
         }
