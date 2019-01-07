@@ -1,0 +1,9 @@
+.vs
+*/bin
+*/obj
+*/out
+TestWebApp
+.gitignore
+.dockerignore
+.gitattributes
+Dockerfile
