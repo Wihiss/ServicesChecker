@@ -28,10 +28,13 @@ namespace TestServer
 
             // Create a TCP/IP socket.  
             _listenerSocket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+	    Console.WriteLine("Socket created at port " + port);
         }
 
         internal void Start()
         {
+
             _started = true;
 
             // Bind the socket to the local endpoint and listen for incoming connections.
