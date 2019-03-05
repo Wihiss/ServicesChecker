@@ -1,7 +1,7 @@
 ﻿services:
  - id: 1
    name: Test
-   host: testsrv
+   host: localhost
    port: 9430
    period: 10
    disabled: false

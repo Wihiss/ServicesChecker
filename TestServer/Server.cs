@@ -23,14 +23,13 @@ namespace TestServer
             // IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             // IPAddress ipAddress = ipHostInfo.AddressList[0];
 
-            // IPAddress address = IPAddress.Parse("127.0.0.1");
-            IPAddress address = IPAddress.Parse("0.0.0.0");
+            IPAddress address = IPAddress.Parse("127.0.0.1");            
             _localEndPoint = new IPEndPoint(address, port);
 
             // Create a TCP/IP socket.  
             _listenerSocket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-	    Console.WriteLine("Socket created at " + _localEndPoint.ToString());
+	    Console.WriteLine("Socket created at port " + port);
         }
 
         internal void Start()

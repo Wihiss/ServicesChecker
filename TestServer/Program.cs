@@ -18,7 +18,7 @@ namespace TestServer
 	    if (port <= 0)
               throw new ArgumentException("Wrong port value ${port}. Should be greater than 0.");
 
-            Server s = new Server(port);
+            Server s = new Server(9430);
             s.Start();
         }
     }

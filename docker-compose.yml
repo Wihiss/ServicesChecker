@@ -1,16 +1,11 @@
 version: '3'
-
 services:
+  testwebapp:
+    build:
+      context: ./TestWebApp
+      dockerfile: Dockerfile
+    ports:
+     - "5000:80"
+    restart: always
 
-  srvchecker:
-   build: ./
-   restart: always
-   depends_on:
-    - "testsrv"
-
-  testsrv:
-   build: ./TestServer
-   restart: always
-   ports:
-    - "9430:9430/tcp"
 
