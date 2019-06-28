@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ServicesCheckerLib.Interfaces
 {
-    internal interface IServiceChecker
+    interface ISCOutput
     {
-        CheckResult Check();
+        Task Write(DateTime timestamp, ServiceDef serviceDef, CheckResult r);
     }
 }

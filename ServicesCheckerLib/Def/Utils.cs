@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ServicesCheckerLib.Impl
+namespace ServicesCheckerLib.Def
 {
     internal class CheckResult
     {

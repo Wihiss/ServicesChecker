@@ -5,3 +5,5 @@
    port: 9430
    period: 10
    disabled: false
+
+outputType: MongoDb
