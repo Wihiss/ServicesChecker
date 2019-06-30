@@ -13,7 +13,7 @@ namespace ServicesCheckerLib.Impl.Pub
 
         public static ISCRunner CreateRunner(SCConfig config, bool autoStart)
         {
-            SCRunnerImpl i = new SCRunnerImpl(ComponentsFactory.CreateTimeMaster(), config);
+            SCRunnerImpl i = new SCRunnerImpl(ComponentsFactory.CreateTimeMaster(), ComponentsFactory.CreateOutputService(config.Output), config.Services);
 
             if (autoStart)
                 i.Start();

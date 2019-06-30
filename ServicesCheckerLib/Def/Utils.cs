@@ -20,6 +20,6 @@ namespace ServicesCheckerLib.Def
 
     internal enum ServiceStatus
     {
-        Available, Unavailable, Unknown
+        Available = 0, Unavailable = 1, Unknown = 2
     }
 }

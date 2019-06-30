@@ -4,8 +4,6 @@ docker run --rm --name srvChkrMongo -v srvChkrMongoData:/data/db -d -p 5515:2701
 
 docker exec -it srvChkrMongo bash
 
-docker run --rm --name srvChkrMongo -v srvChkrMongoData:/data/db -d -p 5515:27017 mongo --auth
-
 use srvChkrDb
 
 db.createUser({user:"dataWriter", pwd:"writer", roles:[{role:"readWrite", db: "srvChkrDb"}]});
@@ -13,3 +11,5 @@ db.createUser({user:"dataReader", pwd:"reader", roles:[{role:"read", db: "srvChk
 db.createUser({user:"admin", pwd:"admin", roles:[{role:"dbOwner", db: "srvChkrDb"}]});
 
 db.auth("dataWriter", "writer")
+
+docker run --rm --name srvChkrMongo -v srvChkrMongoData:/data/db -d -p 5515:27017 mongo --auth

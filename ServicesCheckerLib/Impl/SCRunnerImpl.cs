@@ -15,6 +15,8 @@ namespace ServicesCheckerLib
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         private readonly ITimeMaster _timeMaster;
+        private readonly ISCOutput _outputService;
+
         private bool _started = false;
         private readonly object _startStopLock;
         private volatile bool _checkInProgress = false;
@@ -28,26 +30,29 @@ namespace ServicesCheckerLib
 
         private readonly List<ServiceCheckerContainer> _serviceCheckers;
 
-        internal SCRunnerImpl(ITimeMaster timeMaster, SCConfig config)
+        internal SCRunnerImpl(ITimeMaster timeMaster, ISCOutput outputService, ServiceDef[] services)
         {
             if (timeMaster == null)
                 throw new ArgumentNullException(nameof(timeMaster));
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
+            if (outputService == null)
+                throw new ArgumentNullException(nameof(outputService));
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
 
             _timeMaster = timeMaster;
+            _outputService = outputService;
             _startStopLock = new object();
 
             _serviceCheckers = new List<ServiceCheckerContainer>();
 
-            InitServiceCheckers(config);
+            InitServiceCheckers(services);
         }
 
-        private void InitServiceCheckers(SCConfig config)
+        private void InitServiceCheckers(ServiceDef[] services)
         {
             DateTime now = DateTime.Now;
 
-            Array.ForEach(config.Services, x =>
+            Array.ForEach(services, x =>
             {
                 _serviceCheckers.Add(new ServiceCheckerContainer()
                 {
@@ -88,6 +93,15 @@ namespace ServicesCheckerLib
                                 DateTime nextCheckTime =  DateTime.Now.AddSeconds(x.ServiceDef.Period);
 
                                 logger.Info("Service " + x.ServiceDef.GetFullName() + ": " + r.GetText() + System.Environment.NewLine + "Next check time: " + nextCheckTime);
+
+                                try
+                                {
+                                    _outputService.Write(DateTime.UtcNow, x.ServiceDef, r);
+                                }
+                                catch (Exception ex)
+                                {
+                                    logger.Error(ex, "Output error for service " + x.ServiceDef.GetFullName() + ": " + ex.Message);
+                                }
 
                                 x.NextCheckTime = nextCheckTime;
                             });

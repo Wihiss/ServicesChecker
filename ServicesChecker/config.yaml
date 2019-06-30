@@ -6,4 +6,11 @@
    period: 10
    disabled: false
 
-outputType: MongoDb
+output:
+   outputType: MongoDb
+   target: localhost
+   port: 5515
+   dbName: srvChkrDb
+   tableName: output
+   user:
+   password:
