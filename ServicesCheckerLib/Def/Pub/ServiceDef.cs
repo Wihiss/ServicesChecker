@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ServicesCheckerLib.Def
+namespace ServicesCheckerLib.Def.Pub
 {
     /// <summary>
     /// Service definition.

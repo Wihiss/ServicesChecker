@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Interfaces.Pub;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;

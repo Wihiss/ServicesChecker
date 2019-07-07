@@ -1,19 +1,22 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using ServicesCheckerLib.Def.Pub;
 
 namespace ServicesCheckerLib.Impl.MongoDb
 {
-    internal class SCMongoDbOutputImpl : ISCOutput
+    internal class SCMongoDbStorage : ISCOutput, ISCHistoryLoader
     {
         private readonly MongoClient _mongoClient;
         private readonly IMongoCollection<OutputElement> _outputRecordCollection;
 
-        public SCMongoDbOutputImpl(string host, int port, string dbName, string collectionName, string user, string password)
+        public SCMongoDbStorage(string host, int port, string dbName, string collectionName, string user, string password)
         {
             if (string.IsNullOrEmpty(host))
                 throw new ArgumentException("host cannot be blank");
@@ -34,6 +37,22 @@ namespace ServicesCheckerLib.Impl.MongoDb
                 throw new InvalidOperationException("Database " + dbName + " not found");
 
             _outputRecordCollection = db.GetCollection<OutputElement>(collectionName);
+        }
+
+        public async Task<List<ISCHistoryElement>> Load(int depth)
+        {
+            List<ISCHistoryElement> resList = new List<ISCHistoryElement>();
+
+            using (IAsyncCursor<OutputElement> cursor = await _outputRecordCollection.FindAsync<OutputElement>(FilterDefinition<OutputElement>.Empty))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    foreach (OutputElement document in cursor.Current)
+                        resList.Add(document);
+                }
+            }
+
+            return resList;
         }
 
         public async Task Write(DateTime timestamp, ServiceDef serviceDef, CheckResult r)

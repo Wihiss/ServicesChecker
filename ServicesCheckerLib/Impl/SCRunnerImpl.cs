@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Impl;
 using ServicesCheckerLib.Interfaces;
 using ServicesCheckerLib.Interfaces.Pub;

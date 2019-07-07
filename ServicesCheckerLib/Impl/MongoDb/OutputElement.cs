@@ -1,13 +1,15 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Def.Pub;
+using ServicesCheckerLib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ServicesCheckerLib.Impl.MongoDb
 {
-    internal class OutputElement
+    internal class OutputElement : ISCHistoryElement
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

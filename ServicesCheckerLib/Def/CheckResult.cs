@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServicesCheckerLib.Def.Pub;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,10 +17,5 @@ namespace ServicesCheckerLib.Def
 
             return $"Status: {Status}; Error: " + LastError.ToString();
         }
-    }
-
-    internal enum ServiceStatus
-    {
-        Available = 0, Unavailable = 1, Unknown = 2
     }
 }

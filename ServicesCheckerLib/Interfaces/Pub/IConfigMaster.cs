@@ -1,5 +1,5 @@
-﻿using ServicesCheckerLib.Def;
-using System;
+﻿using System;
+using ServicesCheckerLib.Def.Pub;
 using System.Collections.Generic;
 using System.Text;
 

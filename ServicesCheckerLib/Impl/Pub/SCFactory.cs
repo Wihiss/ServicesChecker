@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Impl.Config;
 using ServicesCheckerLib.Interfaces.Pub;
 

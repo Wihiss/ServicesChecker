@@ -1,4 +1,4 @@
-﻿using ServicesCheckerLib.Def;
+﻿using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Impl.MongoDb;
 using ServicesCheckerLib.Interfaces;
 using System;
@@ -13,12 +13,12 @@ namespace ServicesCheckerLib.Impl
 
         internal static ISCOutput CreateOutputService(OutputConfig outputConfig)
         {
-            if (outputConfig != null && outputConfig.OutputType == SCOutputType.MongoDb)
+            if (outputConfig != null && outputConfig.OutputType == StorageType.MongoDb)
             {
                 if (outputConfig.Port == null)
                     throw new ArgumentNullException("Port cannot be blank");
 
-                return new SCMongoDbOutputImpl(outputConfig.Target, outputConfig.Port.Value, outputConfig.DbName, outputConfig.TableName, outputConfig.User, outputConfig.Password);
+                return new SCMongoDbStorage(outputConfig.Target, outputConfig.Port.Value, outputConfig.DbName, outputConfig.TableName, outputConfig.User, outputConfig.Password);
             }
 
             return new SCDefaultOutputImpl();

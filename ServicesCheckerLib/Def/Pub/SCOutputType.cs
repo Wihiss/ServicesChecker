@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ServicesCheckerLib.Def
+namespace ServicesCheckerLib.Def.Pub
 {
-    public enum SCOutputType
+    public enum StorageType
     {
         MongoDb, Default
     }

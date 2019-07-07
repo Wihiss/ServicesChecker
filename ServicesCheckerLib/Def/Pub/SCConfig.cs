@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ServicesCheckerLib.Def
+namespace ServicesCheckerLib.Def.Pub
 {
     /// <summary>
     /// ServiceChecker config.
@@ -18,5 +18,10 @@ namespace ServicesCheckerLib.Def
         /// Output config.
         /// </summary>
         public OutputConfig Output { get; set; }
+
+        /// <summary>
+        /// History loader config.
+        /// </summary>
+        public HistoryLoaderConfig HistoryLoader { get; set; }
     }
 }

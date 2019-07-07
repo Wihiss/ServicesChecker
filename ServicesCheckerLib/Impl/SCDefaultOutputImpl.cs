@@ -1,4 +1,5 @@
 ﻿using ServicesCheckerLib.Def;
+using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Interfaces;
 using System;
 using System.Collections.Generic;
