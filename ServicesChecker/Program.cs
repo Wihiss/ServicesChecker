@@ -1,5 +1,6 @@
 ﻿using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Def.Pub;
+using ServicesCheckerLib.Impl;
 using ServicesCheckerLib.Impl.Pub;
 using ServicesCheckerLib.Interfaces.Pub;
 using System;
@@ -27,9 +28,9 @@ namespace ServicesChecker
             config.Services = new ServiceDef[1] { sd };*/
 
 
-            SCConfig config = SCFactory.CreateConfigMaster().LoadFromYaml("config.yaml");
+            ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("config.yaml");
 
-            ISCRunner runner = SCFactory.CreateRunner(config, false);
+            IRunner runner = ServiceCheckerFactory.CreateRunner(ComponentFactory.CreateTimeMaster(), ComponentFactory.CreateOutput(config.Output), config.Services, false);
             runner.Start();
 
             // Console.ReadKey();

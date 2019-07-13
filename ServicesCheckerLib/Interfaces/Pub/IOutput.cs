@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServicesCheckerLib.Interfaces
 {
-    interface ISCOutput
+    public interface IOutput
     {
         Task Write(DateTime timestamp, ServiceDef serviceDef, CheckResult r);
     }

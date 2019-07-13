@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ServicesCheckerLib.Interfaces
 {
-    internal interface ITimeMaster
+    public interface ITimeMaster
     {
         DateTime CurrentTime { get; } 
         event Action<DateTime> NextTimeEvent;

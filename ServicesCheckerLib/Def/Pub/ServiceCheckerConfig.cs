@@ -7,7 +7,7 @@ namespace ServicesCheckerLib.Def.Pub
     /// <summary>
     /// ServiceChecker config.
     /// </summary>
-    public class SCConfig
+    public class ServiceCheckerConfig
     {
         /// <summary>
         /// List of services.
@@ -17,11 +17,11 @@ namespace ServicesCheckerLib.Def.Pub
         /// <summary>
         /// Output config.
         /// </summary>
-        public OutputConfig Output { get; set; }
+        public StorageConfig Output { get; set; }
 
         /// <summary>
-        /// History loader config.
+        /// History config.
         /// </summary>
-        public HistoryLoaderConfig HistoryLoader { get; set; }
+        public StorageConfig HistoryLoader { get; set; }
     }
 }

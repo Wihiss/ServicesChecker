@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ServicesCheckerLib.Interfaces
+namespace ServicesCheckerLib.Interfaces.Pub
 {
-    internal interface IServiceChecker
+    public interface IRunner
     {
-        CheckResult Check();
+        void Start();
+        void Stop();
     }
 }

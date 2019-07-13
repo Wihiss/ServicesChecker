@@ -7,6 +7,6 @@ namespace ServicesCheckerLib.Interfaces.Pub
 {
     public interface IConfigMaster
     {
-        SCConfig LoadFromYaml(string configFile);
+        ServiceCheckerConfig LoadFromYaml(string configFile);
     }
 }

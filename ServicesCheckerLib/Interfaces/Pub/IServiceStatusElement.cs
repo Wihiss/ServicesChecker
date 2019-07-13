@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ServicesCheckerLib.Interfaces
 {
-    internal interface ISCHistoryElement
+    public interface IServiceStatusElement
     {
         string Id { get; set; }
 

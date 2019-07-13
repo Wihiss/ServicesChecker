@@ -12,12 +12,12 @@ namespace ServicesCheckerLib.Impl.Config
 {
     internal class ConfigMasterImpl : IConfigMaster
     {
-        public SCConfig LoadFromYaml(string configFile)
+        public ServiceCheckerConfig LoadFromYaml(string configFile)
         {
             return new DeserializerBuilder().
                 WithNamingConvention(new CamelCaseNamingConvention()).
                 Build().
-                Deserialize<SCConfig>(File.ReadAllText(configFile));
+                Deserialize<ServiceCheckerConfig>(File.ReadAllText(configFile));
         }
     }
 }

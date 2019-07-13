@@ -4,17 +4,18 @@ using System.Text;
 using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Def.Pub;
 using ServicesCheckerLib.Impl.Config;
+using ServicesCheckerLib.Interfaces;
 using ServicesCheckerLib.Interfaces.Pub;
 
 namespace ServicesCheckerLib.Impl.Pub
 {
-    public static class SCFactory
+    public static class ServiceCheckerFactory
     {
         public static IConfigMaster CreateConfigMaster() => new ConfigMasterImpl();
 
-        public static ISCRunner CreateRunner(SCConfig config, bool autoStart)
+        public static IRunner CreateRunner(ITimeMaster timeMaster, IOutput output, ServiceDef[] services, bool autoStart)
         {
-            SCRunnerImpl i = new SCRunnerImpl(ComponentsFactory.CreateTimeMaster(), ComponentsFactory.CreateOutputService(config.Output), config.Services);
+            RunnerImpl i = new RunnerImpl(timeMaster, output, services);
 
             if (autoStart)
                 i.Start();

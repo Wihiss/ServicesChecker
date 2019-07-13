@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ServicesCheckerLib.Impl.MongoDb
 {
-    internal class OutputElement : ISCHistoryElement
+    internal class MongoDbServiceStatusElementImpl : IServiceStatusElement
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

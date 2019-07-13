@@ -4,8 +4,14 @@ using System.Text;
 
 namespace ServicesCheckerLib.Def.Pub
 {
-    public abstract class StorageConfig
+    public class StorageConfig
     {
+        private StorageType storagetType = StorageType.Default;
+
+        public StorageType StorageType { get => storagetType; set => storagetType = value; }
+
+        public string Address { get; set; }
+
         public int? Port { get; set; }
 
         public string DbName { get; set; }

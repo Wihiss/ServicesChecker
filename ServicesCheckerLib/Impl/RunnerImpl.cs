@@ -11,12 +11,12 @@ using ServicesCheckerLib.Interfaces.Pub;
 
 namespace ServicesCheckerLib
 {
-    internal class SCRunnerImpl : ISCRunner
+    internal class RunnerImpl : IRunner
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         private readonly ITimeMaster _timeMaster;
-        private readonly ISCOutput _outputService;
+        private readonly IOutput _outputService;
 
         private bool _started = false;
         private readonly object _startStopLock;
@@ -31,7 +31,7 @@ namespace ServicesCheckerLib
 
         private readonly List<ServiceCheckerContainer> _serviceCheckers;
 
-        internal SCRunnerImpl(ITimeMaster timeMaster, ISCOutput outputService, ServiceDef[] services)
+        internal RunnerImpl(ITimeMaster timeMaster, IOutput outputService, ServiceDef[] services)
         {
             if (timeMaster == null)
                 throw new ArgumentNullException(nameof(timeMaster));
@@ -58,7 +58,7 @@ namespace ServicesCheckerLib
                 _serviceCheckers.Add(new ServiceCheckerContainer()
                 {
                     NextCheckTime = now,
-                    Checker = ComponentsFactory.CreateServiceChecker(x),
+                    Checker = ComponentFactory.CreateServiceChecker(x),
                     ServiceDef = x
                 });
             });

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ServicesCheckerLib.Def
 {
-    internal class CheckResult
+    public class CheckResult
     {
         internal ServiceStatus Status;
         internal Exception LastError;

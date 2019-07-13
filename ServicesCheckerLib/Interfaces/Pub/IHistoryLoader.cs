@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ServicesCheckerLib.Interfaces
 {
-    internal interface ISCHistoryLoader
+    public interface IHistoryLoader
     {
-        Task<List<ISCHistoryElement>> Load(int depth);
+        Task<List<IServiceStatusElement>> Load(int depth);
     }
 }

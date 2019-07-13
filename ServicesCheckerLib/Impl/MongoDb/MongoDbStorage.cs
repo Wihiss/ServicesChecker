@@ -11,12 +11,12 @@ using ServicesCheckerLib.Def.Pub;
 
 namespace ServicesCheckerLib.Impl.MongoDb
 {
-    internal class SCMongoDbStorage : ISCOutput, ISCHistoryLoader
+    internal class MongoDbStorage : IOutput, IHistoryLoader
     {
         private readonly MongoClient _mongoClient;
-        private readonly IMongoCollection<OutputElement> _outputRecordCollection;
+        private readonly IMongoCollection<MongoDbServiceStatusElementImpl> _outputRecordCollection;
 
-        public SCMongoDbStorage(string host, int port, string dbName, string collectionName, string user, string password)
+        internal MongoDbStorage(string host, int port, string dbName, string collectionName, string user, string password)
         {
             if (string.IsNullOrEmpty(host))
                 throw new ArgumentException("host cannot be blank");
@@ -36,28 +36,12 @@ namespace ServicesCheckerLib.Impl.MongoDb
             if (db == null)
                 throw new InvalidOperationException("Database " + dbName + " not found");
 
-            _outputRecordCollection = db.GetCollection<OutputElement>(collectionName);
-        }
-
-        public async Task<List<ISCHistoryElement>> Load(int depth)
-        {
-            List<ISCHistoryElement> resList = new List<ISCHistoryElement>();
-
-            using (IAsyncCursor<OutputElement> cursor = await _outputRecordCollection.FindAsync<OutputElement>(FilterDefinition<OutputElement>.Empty))
-            {
-                while (await cursor.MoveNextAsync())
-                {
-                    foreach (OutputElement document in cursor.Current)
-                        resList.Add(document);
-                }
-            }
-
-            return resList;
+            _outputRecordCollection = db.GetCollection<MongoDbServiceStatusElementImpl>(collectionName);
         }
 
         public async Task Write(DateTime timestamp, ServiceDef serviceDef, CheckResult r)
         {
-            OutputElement outputElement = new OutputElement()
+            MongoDbServiceStatusElementImpl outputElement = new MongoDbServiceStatusElementImpl()
             {
                 Timestamp = timestamp,
                 ServiceName = serviceDef.Name,
@@ -66,6 +50,22 @@ namespace ServicesCheckerLib.Impl.MongoDb
             };
 
             await _outputRecordCollection.InsertOneAsync(outputElement);
+        }
+
+        public async Task<List<IServiceStatusElement>> Load(int depth)
+        {
+            List<IServiceStatusElement> resList = new List<IServiceStatusElement>();
+
+            using (IAsyncCursor<MongoDbServiceStatusElementImpl> cursor = await _outputRecordCollection.FindAsync<MongoDbServiceStatusElementImpl>(FilterDefinition<MongoDbServiceStatusElementImpl>.Empty))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    foreach (MongoDbServiceStatusElementImpl document in cursor.Current)
+                        resList.Add(document);
+                }
+            }
+
+            return resList;
         }
     }
 }
