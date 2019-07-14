@@ -19,10 +19,9 @@ namespace ServiceCheckerWebApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<IServiceStatusElement>> Get()
-        {
-            // return new string[] { "value1", "value2" };
-            return null;
+        public async Task<ActionResult<List<IServiceStatusElement>>> Get()
+        {            
+            return await _historyLoader.Load(10);
         }
     }
 }
