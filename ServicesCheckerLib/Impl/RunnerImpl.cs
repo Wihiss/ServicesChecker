@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ServicesCheckerLib.Def;
 using ServicesCheckerLib.Def.Pub;
@@ -20,7 +21,7 @@ namespace ServicesCheckerLib
 
         private bool _started = false;
         private readonly object _startStopLock;
-        private volatile bool _checkInProgress = false;
+        private ManualResetEvent _checkComplete = new ManualResetEvent(true);
 
         private class ServiceCheckerContainer
         {
@@ -66,15 +67,28 @@ namespace ServicesCheckerLib
 
         private void TimeMaster_OnNextTimeEvent(DateTime currentTime)
         {
+            if (!_started)
+                return;
+
             CheckServices(currentTime);
+        }
+
+        private bool IsCheckInProgress()
+        {
+            lock (_checkComplete)
+            {
+                bool flag = _checkComplete.WaitOne(0);
+                if (flag)
+                    _checkComplete.Reset();
+
+                return !flag;
+            }
         }
 
         private void CheckServices(DateTime currentTime)
         {
-            if (_checkInProgress)
+            if (IsCheckInProgress())
                 return;
-
-            _checkInProgress = true;
 
             try
             {
@@ -97,7 +111,17 @@ namespace ServicesCheckerLib
 
                                 try
                                 {
-                                    _outputService.Write(DateTime.UtcNow, x.ServiceDef, r);
+                                    _outputService.Write(DateTime.UtcNow, x.ServiceDef, r).ContinueWith(t =>
+                                    {
+                                        if (t.Exception != null)
+                                        {
+                                            logger.Error(t.Exception, "Output task error for service " + x.ServiceDef.GetFullName() + ": " + t.Exception.ToString());
+                                        }
+                                        else
+                                        {
+                                            logger.Error("Output task error for service " + x.ServiceDef.GetFullName() + " (detailed info is missed)");
+                                        }
+                                    }, TaskContinuationOptions.OnlyOnFaulted);
                                 }
                                 catch (Exception ex)
                                 {
@@ -113,18 +137,18 @@ namespace ServicesCheckerLib
                         }
                         finally
                         {
-                            _checkInProgress = false;
+                            _checkComplete.Set();
                         }
                     });
                 }
                 else
                 {
-                    _checkInProgress = false;
+                    _checkComplete.Set();
                 }
             }
             catch (Exception)
             {
-                _checkInProgress = false;
+                _checkComplete.Set();
                 throw;
             }
         }
@@ -140,6 +164,8 @@ namespace ServicesCheckerLib
 
                 _timeMaster.NextTimeEvent += TimeMaster_OnNextTimeEvent;
 
+                logger.Info("Runner started.");
+
                 _started = true;
             }
         }
@@ -151,9 +177,13 @@ namespace ServicesCheckerLib
                 if (!_started)
                     return;
 
+                _started = false;
+
                 _timeMaster.NextTimeEvent -= TimeMaster_OnNextTimeEvent;
 
-                _started = false;
+                _checkComplete.WaitOne(5000);
+
+                logger.Info("Runner stopped.");
             }
         }
     }

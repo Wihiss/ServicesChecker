@@ -15,7 +15,7 @@ namespace ServicesCheckerLib.Impl.Config
         public ServiceCheckerConfig LoadFromYaml(string configFile)
         {
             return new DeserializerBuilder().
-                WithNamingConvention(new CamelCaseNamingConvention()).
+                WithNamingConvention(CamelCaseNamingConvention.Instance).
                 Build().
                 Deserialize<ServiceCheckerConfig>(File.ReadAllText(configFile));
         }

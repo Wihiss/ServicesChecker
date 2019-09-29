@@ -6,6 +6,6 @@ namespace ServicesCheckerLib.Def.Pub
 {
     public enum StorageType
     {
-        MongoDb, Default
+        Default, File
     }
 }

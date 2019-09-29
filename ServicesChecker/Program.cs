@@ -5,11 +5,15 @@ using ServicesCheckerLib.Impl.Pub;
 using ServicesCheckerLib.Interfaces.Pub;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ServicesChecker
 {
     class Program
     {
+        private static ManualResetEvent stopped = new ManualResetEvent(false);
+        private static IRunner runner;
+
         static void Main(string[] args)
         {
             /*SCConfig config = new SCConfig();
@@ -30,14 +34,36 @@ namespace ServicesChecker
 
             ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("config.yaml");
 
-            IRunner runner = ServiceCheckerFactory.CreateRunner(ComponentFactory.CreateTimeMaster(), ComponentFactory.CreateOutput(config.Output), config.Services, false);
-            runner.Start();
+            runner = ServiceCheckerFactory.CreateRunner(ComponentFactory.CreateTimeMaster(), ComponentFactory.CreateOutput(config.Output), config.Services, false);
 
-            // Console.ReadKey();
+            // Fire and forget
+            Task.Run(() =>
+            {
+                runner.Start();
+            });
 
-            Thread.Sleep(60000);
+            Console.CancelKeyPress += OnCancel;
 
-            runner.Stop();
+            while (true)
+            {
+                if (stopped.WaitOne(1000))
+                    break;
+            }
+        }
+
+        private static void OnCancel(object sender, ConsoleCancelEventArgs e)
+        {
+            Console.WriteLine("Stopping...");
+
+            Console.CancelKeyPress -= OnCancel;
+
+            try
+            {
+                runner.Stop();
+            }
+            catch (Exception) {}
+
+            stopped.Set();
         }
     }
 }

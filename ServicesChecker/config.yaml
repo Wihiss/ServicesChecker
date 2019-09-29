@@ -5,21 +5,34 @@
    port: 9430
    period: 10
    disabled: false
+ - id: 2
+   name: DM.COM
+   host: http://depechemode.com
+   period: 30
+   disabled: false
+
+#output:
+#   storageType: MongoDb
+#   address: localhost
+#   port: 5515
+#   dbName: srvChkrDb
+#   tableName: output
+#   user:
+#   password:
+
+#historyLoader:
+#   storageType: MongoDb
+#   address: localhost
+#   port: 5515
+#   dbName: srvChkrDb
+#   tableName: output
+#   user:
+#   password:
 
 output:
-   storageType: MongoDb
-   address: localhost
-   port: 5515
-   dbName: srvChkrDb
-   tableName: output
-   user:
-   password:
+   storageType: File
+   address: d:\
 
 historyLoader:
-   storageType: MongoDb
-   address: localhost
-   port: 5515
-   dbName: srvChkrDb
-   tableName: output
-   user:
-   password:
+   storageType: File
+   address: d:\

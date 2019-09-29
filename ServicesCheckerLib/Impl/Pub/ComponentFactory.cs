@@ -1,5 +1,5 @@
 ﻿using ServicesCheckerLib.Def.Pub;
-using ServicesCheckerLib.Impl.MongoDb;
+using ServicesCheckerLib.Impl.FileStorage;
 using ServicesCheckerLib.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,26 +13,16 @@ namespace ServicesCheckerLib.Impl
 
         public static IOutput CreateOutput(StorageConfig outputConfig)
         {
-            if (outputConfig != null && outputConfig.StorageType == StorageType.MongoDb)
-            {
-                if (outputConfig.Port == null)
-                    throw new ArgumentNullException("Port cannot be blank");
-
-                return new MongoDbStorage(outputConfig.Address, outputConfig.Port.Value, outputConfig.DbName, outputConfig.TableName, outputConfig.User, outputConfig.Password);
-            }
+            if (outputConfig != null && outputConfig.StorageType == StorageType.File)
+                return new FileStorageWriterImpl(outputConfig.Address);
 
             return new DefaultStorage();
         }
 
         public static IHistoryLoader CreateHistoryLoader(StorageConfig historyLoaderConfig)
         {
-            if (historyLoaderConfig != null && historyLoaderConfig.StorageType == StorageType.MongoDb)
-            {
-                if (historyLoaderConfig.Port == null)
-                    throw new ArgumentNullException("Port cannot be blank");
-
-                return new MongoDbStorage(historyLoaderConfig.Address, historyLoaderConfig.Port.Value, historyLoaderConfig.DbName, historyLoaderConfig.TableName, historyLoaderConfig.User, historyLoaderConfig.Password);
-            }
+            if (historyLoaderConfig != null && historyLoaderConfig.StorageType == StorageType.File)
+                return new FileStorageHistoryLoaderImpl(historyLoaderConfig.Address);
 
             return new DefaultStorage();
         }
