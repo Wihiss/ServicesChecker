@@ -31,7 +31,8 @@
 
 output:
    storageType: File
-   address: d:\
+   # address: ..\data
+   address: D:\Projects\DotNetCore\ServiceCheckerData
 
 historyLoader:
    storageType: File

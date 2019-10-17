@@ -25,7 +25,7 @@ namespace ServiceCheckerWebApp
         {
             Configuration = configuration;
 
-            ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("config.yaml");
+            ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("../config/config.yaml");
 
             _historyLoader = ComponentFactory.CreateHistoryLoader(config.HistoryLoader);
         }

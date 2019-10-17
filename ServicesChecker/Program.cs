@@ -32,7 +32,7 @@ namespace ServicesChecker
             config.Services = new ServiceDef[1] { sd };*/
 
 
-            ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("config.yaml");
+            ServiceCheckerConfig config = ServiceCheckerFactory.CreateConfigMaster().LoadFromYaml("../config/config.yaml");
 
             runner = ServiceCheckerFactory.CreateRunner(ComponentFactory.CreateTimeMaster(), ComponentFactory.CreateOutput(config.Output), config.Services, false);
 
