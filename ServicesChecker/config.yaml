@@ -11,29 +11,10 @@
    period: 30
    disabled: false
 
-#output:
-#   storageType: MongoDb
-#   address: localhost
-#   port: 5515
-#   dbName: srvChkrDb
-#   tableName: output
-#   user:
-#   password:
-
-#historyLoader:
-#   storageType: MongoDb
-#   address: localhost
-#   port: 5515
-#   dbName: srvChkrDb
-#   tableName: output
-#   user:
-#   password:
-
 output:
    storageType: File
-   # address: ..\data
    address: D:\Projects\DotNetCore\ServiceCheckerData
 
-historyLoader:
-   storageType: File
-   address: d:\
+#historyLoader:
+#   storageType: File
+#   address: d:\

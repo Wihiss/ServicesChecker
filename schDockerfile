@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2
+WORKDIR /srvchkr
+
+# Copy ServicesChecker project files
+RUN mkdir ServicesChecker
+
+COPY ./ServicesChecker/ ./ServicesChecker/
+
+# Copy ServicesCheckerLib project files
+RUN mkdir ServicesCheckerLib
+
+COPY ./ServicesCheckerLib/ ./ServicesCheckerLib/
+
+WORKDIR /srvchkr/ServicesChecker
+
+RUN dotnet publish -c Release -o out
+
+RUN mkdir /srvchkr/ServicesChecker/log
+RUN mkdir /srvchkr/ServicesChecker/config
+RUN mkdir /srvchkr/ServicesChecker/data
+
+WORKDIR /srvchkr/ServicesChecker/out
+
+ENTRYPOINT ["dotnet", "ServicesChecker.dll"]

@@ -1,4 +1,3 @@
 ﻿historyLoader:
-   storageType: File
-   # address: d:\
-   address: D:\Projects\DotNetCore\ServiceCheckerData
+ storageType: File
+ address: D:\Projects\DotNetCore\ServiceCheckerData
