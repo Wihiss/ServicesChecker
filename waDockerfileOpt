@@ -1,0 +1,29 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+WORKDIR /srvchkr
+
+# Copy ServiceCheckerWebApp project files
+RUN mkdir ServiceCheckerWebApp
+
+COPY ./ServiceCheckerWebApp/ ./ServiceCheckerWebApp/
+
+# Copy ServicesCheckerLib project files
+RUN mkdir ServicesCheckerLib
+
+COPY ./ServicesCheckerLib/ ./ServicesCheckerLib/
+
+WORKDIR /srvchkr/ServiceCheckerWebApp
+
+RUN dotnet publish -c Release -o outRaw
+
+RUN mkdir out
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
+COPY --from=build /srvchkr/ServiceCheckerWebApp/outRaw /srvchkr/ServiceCheckerWebApp/out
+
+RUN mkdir /srvchkr/ServiceCheckerWebApp/log
+RUN mkdir /srvchkr/ServiceCheckerWebApp/config
+RUN mkdir /srvchkr/ServiceCheckerWebApp/data
+
+WORKDIR /srvchkr/ServiceCheckerWebApp/out
+
+ENTRYPOINT ["dotnet", "ServiceCheckerWebApp.dll"]
