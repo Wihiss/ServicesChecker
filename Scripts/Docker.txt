@@ -1,7 +1,7 @@
 #Build srvchkr container:
 sudo docker build -t wihiss/srvchkr:v1 -t wihiss/srvchkr --no-cache -f schDockerfileOpt .
 
-#Start webapp container:
+#Start srvchkr container:
 sudo docker run --name=srvchkr --rm -d -v /home/eugene/Projects/DotNetCore/srvchkrdata:/srvchkr/ServicesChecker/data -v /home/eugene/Projects/DotNetCore/ServicesChecker/ServicesChecker/bin/Debug/config:/srvchkr/ServicesChecker/config -v /home/eugene/Projects/DotNetCore/srvchkrdata:/srvchkr/ServicesChecker/logs wihiss/srvchkr:v1
 
 #Build webapp container:
